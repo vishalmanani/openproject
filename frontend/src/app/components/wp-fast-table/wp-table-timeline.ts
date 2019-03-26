@@ -33,6 +33,7 @@ import {
 
 export interface WorkPackageTableTimelineState {
   autoZoom:boolean;
+  autoZoomEnabled:boolean;
   visible:boolean;
   zoomLevel:TimelineZoomLevel;
   labels:TimelineLabels;

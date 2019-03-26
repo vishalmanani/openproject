@@ -74,6 +74,15 @@ export class WorkPackageTableTimelineService extends WorkPackageQueryStateServic
   public toggle() {
     let currentState = this.current;
     this.setVisible(!currentState.visible);
+
+    /**
+     * On first opening, activate auto zoom.
+     * Afterwards keep the zoom level.
+     */
+    if (!currentState.visible && this.isAutoZoomEnabled()) {
+      this.toggleAutoZoom(true);
+    }
+    this.toggleAutoZoomEnabled(false);
   }
 
   public setVisible(value:boolean) {
@@ -141,7 +150,11 @@ export class WorkPackageTableTimelineService extends WorkPackageQueryStateServic
   }
 
   public isAutoZoomEnabled():boolean {
-    return this.current.autoZoom;
+    return this.current.autoZoomEnabled;
+  }
+
+  public toggleAutoZoomEnabled(val = !this.current.autoZoomEnabled) {
+    this.modify({ autoZoomEnabled: val });
   }
 
   public get current():WorkPackageTableTimelineState {
@@ -166,7 +179,8 @@ export class WorkPackageTableTimelineService extends WorkPackageQueryStateServic
 
   private get defaultState():WorkPackageTableTimelineState {
     return {
-      autoZoom: true,
+      autoZoom: false,
+      autoZoomEnabled: true,
       zoomLevel: 'days',
       visible: false,
       labels: this.defaultLabels
